@@ -16,6 +16,7 @@
 
 from neutronclient.common import extension
 from neutronclient.i18n import _
+from neutronclient.neutron import v2_0 as neutronV20
 
 
 class IPAddress(extension.NeutronClientExtension):
@@ -25,19 +26,64 @@ class IPAddress(extension.NeutronClientExtension):
     resource_path = '/%s/%%s' % resource_plural
     versions = ['2.0']
 
+    allow_names = False
+    list_columns = ['id', 'address', 'version', 'address_type', 'network_id',
+                    'subnet_id', 'port_ids']
+
 
 class IPAddressesList(extension.ClientExtensionList, IPAddress):
     shell_command = 'ip-address-list'
-    list_columns = ['id', 'address', 'version', 'address_type', 'network_id',
-                    'subnet_id', 'port_ids']
 
 
 class IPAddressesCreate(extension.ClientExtensionCreate, IPAddress):
     shell_command = 'ip-address-create'
 
+    def add_known_arguments(self, parser):
+        parser.add_argument(
+            'network_id',
+            help=_('network id'))
+        parser.add_argument(
+            'version',
+            help=_('IP address version, e.g 4 or 6.'))
+        parser.add_argument(
+            '--port-id',
+            help=_('port id'),
+            action='append')
+        parser.add_argument(
+            '--device-id',
+            help=_('device id'),
+            action='append')
+
+    def args2body(self, parsed_args):
+        body = {}
+        client = self.get_client()
+        if parsed_args.version:
+            body['version'] = parsed_args.version
+        if parsed_args.network_id:
+            body['network_id'] = parsed_args.network_id
+        if parsed_args.port_id:
+            body['port_ids'] = parsed_args.port_id
+        if parsed_args.device_id:
+            body['device_ids'] = parsed_args.device_id
+        neutronV20.update_dict(parsed_args, body, [])
+        return {self.resource: body}
+
 
 class IPAddressesUpdate(extension.ClientExtensionUpdate, IPAddress):
     shell_command = 'ip-address-update'
+    def add_known_arguments(self, parser):
+        parser.add_argument(
+            '--port_id',
+            help=_('port id'),
+            action='append')
+
+    def args2body(self, parsed_args):
+        body = {}
+        client = self.get_client()
+        if parsed_args.port_id:
+            body['port_ids'] = parsed_args.port_id
+        neutronV20.update_dict(parsed_args, body, [])
+        return {self.resource: body}
 
 
 class IPAddressesDelete(extension.ClientExtensionDelete, IPAddress):

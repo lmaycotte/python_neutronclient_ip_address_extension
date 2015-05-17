@@ -9,7 +9,7 @@ setuptools.setup(
     author_email="",
     url="http://TBD",
     license="Apache License, Version 2.0",
-    install_requires=["python-neutronclient"],
+    install_requires=["rackspace-python-neutronclient"],
     py_modules=["python_neutronclient_ip_address_extension"],
     entry_points={
         "neutronclient.extension": [
