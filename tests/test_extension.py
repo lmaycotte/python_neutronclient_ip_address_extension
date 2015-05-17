@@ -32,9 +32,7 @@ class TestShell(FixtureExtensionLoader):
                    'ip-address-create': ip_address.IPAddressesCreate,
                    'ip-address-update': ip_address.IPAddressesUpdate,
                    'ip-address-show': ip_address.IPAddressesShow,
-                   'ip-address-delete': ip_address.IPAddressesDelete,
-                   'ip-address-port-list': ip_address.IPAddressesPortsList,
-                   'ip-address-port-update': ip_address.IPAddressesPortsUpdate}
+                   'ip-address-delete': ip_address.IPAddressesDelete}
         self.assertDictContainsSubset(ext_cmd, shell.COMMANDS['2.0'])
 
     def test_ip_address_create(self):

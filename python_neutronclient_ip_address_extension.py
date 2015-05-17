@@ -32,31 +32,33 @@ class IPAddress(extension.NeutronClientExtension):
 
 
 class IPAddressesList(extension.ClientExtensionList, IPAddress):
+    """List all IP addresses."""
     shell_command = 'ip-address-list'
 
 
 class IPAddressesCreate(extension.ClientExtensionCreate, IPAddress):
+    """Create an IP address."""
     shell_command = 'ip-address-create'
 
     def add_known_arguments(self, parser):
         parser.add_argument(
-            'network_id',
-            help=_('network id'))
+            'network_id', metavar='NETWORK_ID',
+            help=_('Network ID this IP address belongs to.'))
         parser.add_argument(
             'version',
-            help=_('IP address version, e.g 4 or 6.'))
+            type=int, metavar='IP_VERSION',
+            help=_('IP version to use, e.g 4 or 6.'))
         parser.add_argument(
             '--port-id',
-            help=_('port id'),
+            help=_('Port ID this IP address associates with.'),
             action='append')
         parser.add_argument(
             '--device-id',
-            help=_('device id'),
+            help=_('Device ID this IP address associates with.'),
             action='append')
 
     def args2body(self, parsed_args):
         body = {}
-        client = self.get_client()
         if parsed_args.version:
             body['version'] = parsed_args.version
         if parsed_args.network_id:
@@ -70,16 +72,17 @@ class IPAddressesCreate(extension.ClientExtensionCreate, IPAddress):
 
 
 class IPAddressesUpdate(extension.ClientExtensionUpdate, IPAddress):
+    """Update an IP address."""
     shell_command = 'ip-address-update'
+
     def add_known_arguments(self, parser):
         parser.add_argument(
             '--port_id',
-            help=_('port id'),
+            help=_('Port ID this IP address associates with.'),
             action='append')
 
     def args2body(self, parsed_args):
         body = {}
-        client = self.get_client()
         if parsed_args.port_id:
             body['port_ids'] = parsed_args.port_id
         neutronV20.update_dict(parsed_args, body, [])
@@ -87,10 +90,12 @@ class IPAddressesUpdate(extension.ClientExtensionUpdate, IPAddress):
 
 
 class IPAddressesDelete(extension.ClientExtensionDelete, IPAddress):
+    """Delete an IP address."""
     shell_command = 'ip-address-delete'
 
 
 class IPAddressesShow(extension.ClientExtensionShow, IPAddress):
+    """Show an IP address."""
     shell_command = 'ip-address-show'
 
 
@@ -117,9 +122,9 @@ class IPAddressesPorts(extension.NeutronClientExtension):
 
 
 class IPAddressesPortsList(extension.ClientExtensionList, IPAddressesPorts):
-    shell_command = 'ip-address-port-list'
+    pass
 
 
 class IPAddressesPortsUpdate(extension.ClientExtensionUpdate,
                              IPAddressesPorts):
-    shell_command = 'ip-address-port-update'
+    pass
