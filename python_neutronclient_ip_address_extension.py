@@ -27,6 +27,8 @@ class IPAddress(extension.NeutronClientExtension):
 
 class IPAddressesList(extension.ClientExtensionList, IPAddress):
     shell_command = 'ip-address-list'
+    list_columns = ['id', 'address', 'version', 'address_type', 'network_id',
+                    'subnet_id', 'port_ids']
 
 
 class IPAddressesCreate(extension.ClientExtensionCreate, IPAddress):
