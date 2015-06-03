@@ -15,6 +15,7 @@
 #
 
 from neutronclient.common import extension
+from neutronclient.i18n import _
 
 
 class IPAddress(extension.NeutronClientExtension):
@@ -45,3 +46,31 @@ class IPAddressesDelete(extension.ClientExtensionDelete, IPAddress):
 
 class IPAddressesShow(extension.ClientExtensionShow, IPAddress):
     shell_command = 'ip-address-show'
+
+
+class IPAddressesPorts(extension.NeutronClientExtension):
+    parent_resource = 'ip_addresses'
+    child_resource = 'port'
+    resource = '%s_%s' % (parent_resource, child_resource)
+    resource_plural = '%ss' % resource
+    child_resource_plural = '%ss' % child_resource
+    object_path = '/%s/%%s/%s' % (parent_resource, child_resource_plural)
+    resource_path = '/%s/%%s/%s/%%s' % (parent_resource, child_resource_plural)
+    versions = ['2.0']
+
+    allow_names = False
+    def set_extra_attrs(self, parsed_args):
+        self.parent_id = parsed_args.ip_address_id
+
+    def add_known_arguments(self, parser):
+        parser.add_argument(
+            'ip_address', metavar='IP_ADDRESS',
+            help=_('ID of parent resource, %s.') % self.parent_resource)
+
+
+class IPAddressesPortsList(extension.ClientExtensionList, IPAddressesPorts):
+    shell_command = 'ip-address-port-list'
+
+
+class IPAddressesPortsUpdate(extension.ClientExtensionUpdate, IPAddressesPorts):
+    shell_command = 'ip-address-port-update'
