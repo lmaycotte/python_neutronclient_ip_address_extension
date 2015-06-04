@@ -55,7 +55,8 @@ class IPAddressesPorts(extension.NeutronClientExtension):
     resource_plural = '%ss' % resource
     child_resource_plural = '%ss' % child_resource
     object_path = '/%s/%%s/%s' % (parent_resource, child_resource_plural)
-    resource_path = '/%s/%%s/%s/%%s' % (parent_resource, child_resource_plural)
+    resource_path = '/%s/%%s/%s/%%%%s' % (
+        parent_resource, child_resource_plural)
     versions = ['2.0']
 
     allow_names = False
