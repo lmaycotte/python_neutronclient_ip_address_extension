@@ -12,6 +12,7 @@ setuptools.setup(
     install_requires=["python-neutronclient"],
     py_modules=["python_neutronclient_ip_address_extension"],
     entry_points={
-        "neutronclient.extension": ["ip_address = python_neutronclient_ip_address_extension"]
+        "neutronclient.extension": [
+            "ip_address = python_neutronclient_ip_address_extension"]
     }
 )
