@@ -62,7 +62,7 @@ class IPAddressesPorts(extension.NeutronClientExtension):
     allow_names = False
 
     def set_extra_attrs(self, parsed_args):
-        self.parent_id = parsed_args.ip_address_id
+        self.parent_id = parsed_args.ip_address
 
     def add_known_arguments(self, parser):
         parser.add_argument(
