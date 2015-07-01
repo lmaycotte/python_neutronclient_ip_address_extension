@@ -77,7 +77,7 @@ class IPAddressesUpdate(extension.ClientExtensionUpdate, IPAddress):
 
     def add_known_arguments(self, parser):
         parser.add_argument(
-            '--port_id',
+            '--port-id',
             help=_('Port ID this IP address associates with.'),
             action='append')
 
