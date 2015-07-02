@@ -1,5 +1,6 @@
-import mock
+import sys
 
+import mock
 from neutronclient import shell
 from neutronclient.tests.unit import test_cli20
 
@@ -35,20 +36,52 @@ class TestShell(FixtureExtensionLoader):
                    'ip-address-delete': ip_address.IPAddressesDelete}
         self.assertDictContainsSubset(ext_cmd, shell.COMMANDS['2.0'])
 
-    def test_ip_address_create(self):
-        pass
-
     def test_ip_addresses_list(self):
-        pass
+        resources = 'ip_addresses'
+        cmd = ip_address.IPAddressesList(test_cli20.MyApp(sys.stdout), None)
+        self._test_list_resources(resources, cmd, True)
 
     def test_ip_address_show(self):
-        pass
-
-    def test_ip_address_update(self):
-        pass
+        resource = 'ip_address'
+        cmd = ip_address.IPAddressesShow(test_cli20.MyApp(sys.stdout), None)
+        args = ['--fields', 'id', '--fields', 'address', self.test_id]
+        self._test_show_resource(resource, cmd, self.test_id,
+                                 args, ['id', 'address'])
 
     def test_ip_address_delete(self):
-        pass
+        resource = 'ip_address'
+        cmd = ip_address.IPAddressesDelete(test_cli20.MyApp(sys.stdout),
+                                           None)
+        myid = 'myid'
+        args = [myid]
+        self._test_delete_resource(resource, cmd, myid, args)
+
+    def test_ip_address_create(self):
+        resource = 'ip_address'
+        cmd = ip_address.IPAddressesCreate(test_cli20.MyApp(sys.stdout),
+                                           None)
+        myid = 'myid'
+        network_id = 'mynetworkid'
+        version = '4'
+        port_id = 'myportid'
+        device_id = 'mydeviceid'
+        args = [network_id, version, '--port-id', port_id, '--device-id',
+                device_id]
+        position_names = ['network_id', 'version', 'port_ids', 'device_ids', ]
+        position_values = [network_id, int(version), [port_id], [device_id]]
+        self._test_create_resource(resource, cmd, None, myid, args,
+                                   position_names, position_values,
+                                   admin_state_up=None)
+
+    def test_ip_address_update(self):
+        resource = 'ip_address'
+        cmd = ip_address.IPAddressesUpdate(test_cli20.MyApp(sys.stdout),
+                                           None)
+        myid = 'myid'
+        port_id = 'myportid'
+        self._test_update_resource(resource, cmd, myid,
+                                   [myid, '--port-id', port_id],
+                                   {'port_ids': [port_id]})
 
 
 class TestClient(FixtureExtensionLoader):

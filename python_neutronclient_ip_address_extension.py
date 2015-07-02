@@ -110,16 +110,6 @@ class IPAddressesPorts(extension.NeutronClientExtension):
         parent_resource, child_resource_plural)
     versions = ['2.0']
 
-    allow_names = False
-
-    def set_extra_attrs(self, parsed_args):
-        self.parent_id = parsed_args.ip_address
-
-    def add_known_arguments(self, parser):
-        parser.add_argument(
-            'ip_address', metavar='IP_ADDRESS',
-            help=_('ID of parent resource, %s.') % self.parent_resource)
-
 
 class IPAddressesPortsList(extension.ClientExtensionList, IPAddressesPorts):
     pass
