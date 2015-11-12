@@ -27,6 +27,8 @@ class FixtureExtensionLoader(test_cli20.CLITestV20Base):
 
 
 class TestShell(FixtureExtensionLoader):
+    non_admin_status_resources = ["ip_address"]
+
     def test_ext_cmd_loaded(self):
         shell.NeutronShell('2.0')
         ext_cmd = {'ip-address-list': ip_address.IPAddressesList,
@@ -70,8 +72,7 @@ class TestShell(FixtureExtensionLoader):
         position_names = ['network_id', 'version', 'port_ids', 'device_ids', ]
         position_values = [network_id, int(version), [port_id], [device_id]]
         self._test_create_resource(resource, cmd, None, myid, args,
-                                   position_names, position_values,
-                                   admin_state_up=None)
+                                   position_names, position_values)
 
     def test_ip_address_update(self):
         resource = 'ip_address'
@@ -164,7 +165,7 @@ class TestClient(FixtureExtensionLoader):
             request.return_value = (self.resp, "{}")
             ip_address_id = "1000"
             port_id = "2000"
-            self.client.update_ip_addresses_port(ip_address_id, port_id, body)
+            self.client.update_ip_addresses_port(port_id, ip_address_id, body)
             self.assertEqual(request.call_count, 1)
             self.assertTrue(request.call_args[0][0].endswith(
                 "/v2.0/ip_addresses/1000/ports/2000.json"))
