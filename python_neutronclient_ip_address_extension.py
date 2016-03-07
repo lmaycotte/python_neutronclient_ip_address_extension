@@ -112,9 +112,9 @@ class IPAddressesPorts(extension.NeutronClientExtension):
 
 
 class IPAddressesPortsList(extension.ClientExtensionList, IPAddressesPorts):
-    pass
+    shell_command = 'ip-addresses-ports-list'
 
 
 class IPAddressesPortsUpdate(extension.ClientExtensionUpdate,
                              IPAddressesPorts):
-    pass
+    shell_command = 'ip-addresses-ports-update'
